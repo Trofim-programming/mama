@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>С Днём Рождения, Мама Вика!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Pacifico', cursive;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: linear-gradient(to bottom right, #fff0f5, #ffe6f0);
+      color: #cc3366;
+      overflow-x: hidden;
+    }
+
+    section {
+      min-height: 100vh;
+      padding: 2em;
+      box-sizing: border-box;
+    }
+
+    h1, p {
+      text-align: center;
+      animation: fadeInDown 2s ease-in-out;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-top: 1em;
+    }
+
+    p {
+      font-size: 1.5em;
+      margin: 1em auto;
+      width: 90%;
+    }
+
+    .scene {
+      width: 100%;
+      height: 300px;
+      perspective: 1000px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 2em;
+    }
+
+    .gift-box {
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle, #ffc0cb, pink);
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateY(0deg);
+      animation: rotate 5s linear forwards, pulse 1.5s ease-in-out 3 alternate;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .gift-box::before, .gift-box::after {
+      content: '';
+      position: absolute;
+      background: white;
+    }
+
+    .gift-box::before {
+      width: 20px;
+      height: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .gift-box::after {
+      width: 100%;
+      height: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .sparkle-heart {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2em;
+      animation: floatHeart 2s ease-in-out 3;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #fff0f8;
+      border-radius: 20px;
+      padding: 2em;
+      max-width: 400px;
+      text-align: center;
+      font-size: 1.5em;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal img {
+      width: 100px;
+      animation: floatPetals 2s ease-in-out infinite;
+    }
+
+    .age {
+      font-size: 2em;
+      color: #e91e63;
+      margin-top: 0.5em;
+    }
+
+    @keyframes rotate {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
+    }
+
+    @keyframes floatHeart {
+      0% {transform: translate(-50%, 0); opacity: 1;}
+      100% {transform: translate(-50%, -30px); opacity: 0;}
+    }
+
+    @keyframes floatPetals {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-20px); opacity: 0.5; }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .next-button {
+      display: block;
+      margin: 2em auto;
+      font-size: 1.2em;
+      padding: 0.5em 1em;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff99aa;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+
+  <!-- Замени src на свою музыку -->
+  <audio id="bg-music">
+    <source src="vikasong.mp3" type="audio/mpeg">
+  </audio>
+
+  <section>
+    <h1>С Днём Рождения, мама Вика!</h1>
+    <p>Поздравляем тебя с 50-летием! Тебя любят твои сыновья: Трофим, Вова, Айтеч и муж Ваня! 💖</p>
+
+    <div class="scene">
+      <div class="gift-box" onclick="openSurprise(event); playMusic();">
+        <div class="sparkle-heart">💖</div>
+      </div>
+    </div>
+
+    <div class="cake">
+      <div class="age" style="text-align: center;">50 лет 🎂✨</div>
+    </div>
+
+    
+  </section>
+
+  <section id="second">
+    <p>Ты всегда была для нас источником тепла, заботы и вдохновения. 💐</p>
+    <p>Пусть каждый день твоей жизни будет наполнен радостью, спокойствием и любовью, как ты наполняешь нашу. 💕</p>
+  </section>
+
+  <div class="modal" id="modal" onclick="resetView(event)">
+    <div class="modal-content">
+      <p>Сюрприз, мама Вика! Мы тебя обожаем! 💐</p>
+      <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Лепестки">
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      let animationFrame;
+      const confettis = Array.from({length: 300}, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 6 + 2,
+        d: Math.random() * 300,
+        color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+        tilt: Math.floor(Math.random() * 10) - 10,
+        tiltAngle: 0,
+        tiltAngleIncremental: Math.random() * 0.1 + 0.05
+      }));
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confettis.forEach(c => {
+          ctx.beginPath();
+          ctx.lineWidth = c.r;
+          ctx.strokeStyle = c.color;
+          ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
+          ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r);
+          ctx.stroke();
+        });
+        update();
+        animationFrame = requestAnimationFrame(draw);
+      }
+
+      function update() {
+        confettis.forEach(c => {
+          c.tiltAngle += c.tiltAngleIncremental;
+          c.y += (Math.cos(c.d) + 3 + c.r / 2) / 2;
+          c.tilt = Math.sin(c.tiltAngle - c.d / 3) * 15;
+          if (c.y > canvas.height) {
+            c.y = -10;
+            c.x = Math.random() * canvas.width;
+          }
+        });
+      }
+
+      draw();
+      setTimeout(() => cancelAnimationFrame(animationFrame), 10000);
+    })();
+
+    function openSurprise(e) {
+      e.stopPropagation();
+      document.getElementById('modal').classList.add('show');
+    }
+
+    function playMusic() {
+  const music = document.getElementById('bg-music');
+  if (music && music.paused) {
+    music.play().catch(err => console.log('Автовоспроизведение заблокировано'));
+  }
+}
+
+function resetView(e) {
+      const modal = document.getElementById('modal');
+      if (modal.classList.contains('show')) {
+        modal.classList.remove('show');
+      }
+    }
+  </script>
+</body>
+</html>
